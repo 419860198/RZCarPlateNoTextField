@@ -31,6 +31,19 @@ NSString * const rz_plateNo_code_end_Regx = @"[A-Z0-9挂学警港澳]";
     return self;
 }
 
+- (NSBundle *) resourceBundle {
+    static NSBundle *resourceBundle = nil;
+    if (!resourceBundle) {
+        NSURL *bundleURL = [[NSBundle mainBundle] URLForResource:@"Frameworks" withExtension:nil];
+        bundleURL = [bundleURL URLByAppendingPathComponent:@"RZCarPlateNoTextField"];
+        bundleURL = [bundleURL URLByAppendingPathExtension:@"framework"];
+        bundleURL = [bundleURL URLByAppendingPathComponent:@"RZCarPlateNoResource"];
+        bundleURL = [bundleURL URLByAppendingPathExtension:@"bundle"];
+        resourceBundle = [NSBundle bundleWithURL:bundleURL];
+    }
+    return resourceBundle;
+}
+
 - (NSArray *)rz_provinces {
     if (!_rz_provinces) {
         NSArray <NSArray <NSString *>*> *province = @[@[@"京",@"津",@"渝",@"沪",@"冀",@"晋",@"辽",@"吉",@"黑",@"苏"],
@@ -48,7 +61,7 @@ NSString * const rz_plateNo_code_end_Regx = @"[A-Z0-9挂学警港澳]";
                     model.text = @"A";
                 } else if ([obj isEqualToString:@"delete"]) {
                     model.rz_isDeleteBtnType = YES;
-                    model.image = [UIImage imageNamed:@"RZCarPlateNoResource.bundle/rzDelete"];
+                    model.image = [UIImage imageWithContentsOfFile:[[self resourceBundle] pathForResource:@"rzDelete@2x.png" ofType: nil]];
                 } else {
                     model.text = obj;
                 }
@@ -79,7 +92,7 @@ NSString * const rz_plateNo_code_end_Regx = @"[A-Z0-9挂学警港澳]";
                     model.text = @"省";
                 } else if ([obj isEqualToString:@"delete"]) {
                     model.rz_isDeleteBtnType = YES;
-                    model.image = [UIImage imageNamed:@"RZCarPlateNoResource.bundle/rzDelete"];
+                    model.image = [UIImage imageWithContentsOfFile:[[self resourceBundle] pathForResource:@"rzDelete@2x.png" ofType: nil]];
                 } else {
                     model.text = obj;
                 }
