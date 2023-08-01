@@ -22,6 +22,7 @@
 @property (nonatomic, assign) CGFloat rz_cellWidth;
 
 @property (nonatomic, strong) UICollectionView *collectionView;
+@property(nonatomic, strong) UIButton *doneBtn;
 
 @property (nonatomic, strong) RZCarPlateNoKeyBoardViewModel *viewModel;
 
@@ -30,19 +31,13 @@
 
 @implementation RZCarPlateNoKeyBoardView
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
-
 - (instancetype)initWithFrame:(CGRect)frame {
     self.rz_cellHeight = 54;
     self.rz_cellWidth = MIN(60, rz_kScreenWidth/10.f);
-    frame = CGRectMake(0, 0, rz_kScreenWidth, self.rz_cellHeight * 4 + rz_kSafeBottomMargin + 10);
+    frame = CGRectMake(0, 0, rz_kScreenWidth, self.rz_cellHeight * 4 + rz_kSafeBottomMargin + 10 + 50);
     if (self = [super initWithFrame:frame]) {
+        self.translatesAutoresizingMaskIntoConstraints = NO;
+        [self invalidateIntrinsicContentSize];
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.minimumLineSpacing = 0;
         layout.minimumInteritemSpacing = 0;
@@ -52,17 +47,24 @@
         self.collectionView.dataSource = self;
         self.collectionView.clipsToBounds = NO;
         [self addSubview:self.collectionView];
-        self.collectionView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
+        self.collectionView.backgroundColor = [UIColor clearColor];
         [self.collectionView registerClass:[RZCarPlateNoKeyBoardCell class] forCellWithReuseIdentifier:@"cell"];
+        [self addSubview:self.doneBtn];
     }
+    
     return self;
+}
+
+- (CGSize)intrinsicContentSize {
+    return CGSizeMake(rz_kScreenWidth, self.rz_cellHeight * 4 + rz_kSafeBottomMargin + 10 + 50);
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    
-    self.frame = CGRectMake(0, 0, rz_kScreenWidth, self.rz_cellHeight * 4 + rz_kSafeBottomMargin + 10);
-    self.collectionView.frame =  CGRectMake(0, 0, rz_kScreenWidth, self.rz_cellHeight * 4 + 10);
+    CGFloat doneBtnWith = 32;
+    self.frame = CGRectMake(0, 0, rz_kScreenWidth, self.rz_cellHeight * 4 + rz_kSafeBottomMargin + 10 + 50);
+    self.doneBtn.frame = CGRectMake(self.frame.size.width - 16 - doneBtnWith, (50 - doneBtnWith)/2.0, doneBtnWith, doneBtnWith);
+    self.collectionView.frame =  CGRectMake(0, 50, rz_kScreenWidth, self.rz_cellHeight * 4 + 10);
     [self.collectionView reloadData];
 }
 
@@ -130,4 +132,24 @@
     }  
 }
 
+- (void)doneBtnAction {
+    if (self.rz_keyboardEndEdit) {
+        self.rz_keyboardEndEdit();
+    }
+}
+
+
+- (UIButton *)doneBtn {
+    if (!_doneBtn) {
+        _doneBtn = ({
+            UIButton *v = [[UIButton alloc] init];
+            [v setTitle:@"完成" forState: UIControlStateNormal];
+            v.titleLabel.font = [UIFont fontWithName:@"PingFang SC" size:16];
+            [v setTitleColor:[UIColor colorWithRed:0/255.0 green:123/255.0 blue:255/255.0 alpha:1/1.0] forState:UIControlStateNormal];
+            [v addTarget:self action:@selector(doneBtnAction) forControlEvents:UIControlEventTouchUpInside];
+            v;
+        });
+    }
+    return _doneBtn;
+}
 @end
