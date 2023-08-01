@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface RZCarPlateNoKeyBoardView : UIView
 
 @property (nonatomic, copy) void(^rz_keyboardEditing)(BOOL isDel, NSString *text);
+@property (nonatomic, copy) void(^rz_keyboardEndEdit)(BOOL isDel, NSString *text);
 
 /**
  改变键盘数据，
