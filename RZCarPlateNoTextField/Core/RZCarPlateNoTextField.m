@@ -50,6 +50,7 @@
            self.inputView = self.tempInputView;
         }
     }
+    self.inputAccessoryView = [UIView new];
 }
 
 - (void)rz_changeKeyBoard:(BOOL)showProvince {
@@ -68,6 +69,9 @@
         __weak typeof(self) weakSelf = self;
         _keyBoardView.rz_keyboardEditing = ^(BOOL isDel, NSString * _Nonnull text) {
             [weakSelf rz_textFieldEdit:isDel text:text];
+        };
+        _keyBoardView.rz_keyboardEndEdit = ^{
+            [weakSelf endEditing:YES];
         };
     }
     return _keyBoardView;
