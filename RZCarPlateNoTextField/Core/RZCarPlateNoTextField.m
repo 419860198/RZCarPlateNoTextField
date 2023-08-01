@@ -117,6 +117,12 @@
         }
         newRange = NSMakeRange(MIN(range.location + tempLength, tempNewText.length), 0);
     }
+    if ([rz_province containsString:text] && tempNewText.length >= 1) {
+        [self.keyBoardView rz_changeKeyBoard:NO];
+    } else if (tempNewText.length == 0) {
+        [self.keyBoardView rz_changeKeyBoard:YES];
+    }
+    
     [self rz_setSelectedRange:newRange];
  
     if (self.rz_textFieldEditingValueChanged) {
